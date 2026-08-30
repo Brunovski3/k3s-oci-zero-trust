@@ -1,0 +1,9 @@
+# Export cruto do servidor — nunca commitado cru
+local-export/
+
+# Segredos por qualquer nome
+*secret*
+*token*
+*.key
+*.pem
+credentials*.yaml
