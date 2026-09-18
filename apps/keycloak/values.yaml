@@ -1,0 +1,29 @@
+http:
+  relativePath: "/"
+
+command:
+  - "/opt/keycloak/bin/kc.sh"
+  - "start"
+  - "--http-enabled=true"
+  - "--http-port=8080"
+  - "--health-enabled=true"
+  - "--metrics-enabled=true"
+  - "--hostname-strict=false"
+  - "--proxy-headers=xforwarded"
+
+extraEnv: |
+  - name: KEYCLOAK_ADMIN
+    value: admin
+  - name: KEYCLOAK_ADMIN_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: keycloak-admin
+        key: password
+  - name: KC_HOSTNAME
+    value: https://keycloak.ling-becrux.ts.net
+
+service:
+  httpPort: 8080
+
+ingress:
+  enabled: false
