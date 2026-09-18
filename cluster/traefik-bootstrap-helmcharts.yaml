@@ -1,0 +1,97 @@
+apiVersion: v1
+items:
+- apiVersion: helm.cattle.io/v1
+  kind: HelmChart
+  metadata:
+    annotations:
+      helmcharts.cattle.io/managed-by: helm-controller
+      objectset.rio.cattle.io/applied: H4sIAAAAAAAA/4ySX4vbMAzAv0oQ3NPSpG2atWfYQ9cVNg7GcfvzVBiKrTReHNvYSkcp/e7D2WAbY9292bL008+yL4Bef6YQtbMgoCMzFBKZDRXalacF5NBrq0DAWzLDrsPAkMNAjAoZQVwArXWMrJ2NaeuaryQ5EhdBu99QOjEg/+e5+2YpzI6nHgT0VfxDIs8etFWvtko5+1+ExYFAAAekVvfPSo8eZarpx4Zm8RyZBrjmYLAhc/NSHcYOBKh6hZVUtLmv5bLFulLzpl6s6g2ukRb3y2pdral9WSXoX3o3BKInmdrLaewCOmYfRVneXR4+vd4/vd9/3H/4sn18d70rY3oCWU6ZsfxJn63mxaJYvRj9tJhDDi1qMwZ6dEbLMwgIxOGc4i5I2jnbGi05guAwUg6ROPU/GtegKX6IvaEWR8NPdNQx1QpIqic0I8Wds0w2qSryxp0HsiwONsu8U9tf/2QKZZkPbiDuaIxplt4FFtkBNvPN8gBTBlyv3wMAAP//CGLbU6ACAAA
+      objectset.rio.cattle.io/id: ""
+      objectset.rio.cattle.io/owner-gvk: k3s.cattle.io/v1, Kind=Addon
+      objectset.rio.cattle.io/owner-name: traefik
+      objectset.rio.cattle.io/owner-namespace: kube-system
+    creationTimestamp: "2026-08-30T19:01:42Z"
+    finalizers:
+    - wrangler.cattle.io/on-helm-chart-remove
+    generation: 1
+    labels:
+      objectset.rio.cattle.io/hash: d54a3cde895c2fa53d0b51458a7ae1923737ef63
+    name: traefik
+    namespace: kube-system
+    resourceVersion: "473"
+    uid: 692f2ff1-06f0-4722-8374-6d393ef8a950
+  spec:
+    chart: https://%{KUBERNETES_API}%/static/charts/traefik-40.1.4+up40.1.0.tgz
+    driver: secret
+    failurePolicy: retry
+    forceConflicts: true
+    set:
+      global.systemDefaultRegistry: ""
+    valuesContent: |-
+      deployment:
+        podAnnotations:
+          prometheus.io/port: "8082"
+          prometheus.io/scrape: "true"
+      providers:
+        kubernetesIngress:
+          publishedService:
+            enabled: true
+      priorityClassName: "system-cluster-critical"
+      image:
+        repository: "rancher/mirrored-library-traefik"
+        tag: "3.7.8"
+      tolerations:
+      - key: "CriticalAddonsOnly"
+        operator: "Exists"
+      - key: "node-role.kubernetes.io/control-plane"
+        operator: "Exists"
+        effect: "NoSchedule"
+      service:
+        spec:
+          ipFamilyPolicy: "PreferDualStack"
+  status:
+    conditions:
+    - message: Applying HelmChart using Job kube-system/helm-install-traefik
+      reason: Job created
+      status: "True"
+      type: JobCreated
+    - status: "False"
+      type: Failed
+    jobName: helm-install-traefik
+- apiVersion: helm.cattle.io/v1
+  kind: HelmChart
+  metadata:
+    annotations:
+      helmcharts.cattle.io/managed-by: helm-controller
+      objectset.rio.cattle.io/applied: H4sIAAAAAAAA/4yRTWvjMBCG/8oykNP6I47tTSLYQzYEdgksYT96LWNpXKuWJSONU0Lwfy9OL8khbY969erRI80ZsNcP5IN2FgQ0ZLpEIrOhRLv0mEEErbYKBPwk020b9AwRdMSokBHEGdBax8ja2TAtXfVMkgNx4rW7QumJAdHdffdiycdPxxYEtHm4kYi+7LVV3zdKOfshwmJHIIA9Uq3bT9VDj3I60w4VxeEUmDoYIzBYkXn3UQ2GBgSossBcKlqtS7mosczVvCqzolzhEilbL/JlvqT6Wz5Bb/Vi6RW8hXckQk9yUpCXrxfQMPdBpOnsvP//Y/fn9+7f7u/j5vBrnKVhGoNML82QXt0QF/MkS4qvQ1/MIYIatRk8HZzR8gQCPLE/TbnzkrbO1kZLDiDYDzSOrwEAAP//PowF+CICAAA
+      objectset.rio.cattle.io/id: ""
+      objectset.rio.cattle.io/owner-gvk: k3s.cattle.io/v1, Kind=Addon
+      objectset.rio.cattle.io/owner-name: traefik
+      objectset.rio.cattle.io/owner-namespace: kube-system
+    creationTimestamp: "2026-08-30T19:01:42Z"
+    finalizers:
+    - wrangler.cattle.io/on-helm-chart-remove
+    generation: 1
+    labels:
+      objectset.rio.cattle.io/hash: d54a3cde895c2fa53d0b51458a7ae1923737ef63
+    name: traefik-crd
+    namespace: kube-system
+    resourceVersion: "467"
+    uid: 4cb51857-a68c-4c49-9d28-bb50e8b4ef31
+  spec:
+    chart: https://%{KUBERNETES_API}%/static/charts/traefik-crd-40.1.4+up40.1.0.tgz
+    driver: secret
+    failurePolicy: retry
+    forceConflicts: true
+  status:
+    conditions:
+    - message: Applying HelmChart using Job kube-system/helm-install-traefik-crd
+      reason: Job created
+      status: "True"
+      type: JobCreated
+    - status: "False"
+      type: Failed
+    jobName: helm-install-traefik-crd
+kind: List
+metadata:
+  resourceVersion: ""
