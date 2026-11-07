@@ -18,7 +18,41 @@ Zero porta aberta: os serviços são publicados via **Tailscale Operator (ProxyG
 | Automação alternativa | Docker stack do host (`komodo-core/periphery/mongo`, `floci-oci`, `fail2ban`) — viva e em paralelo |
 | Automação | n8n (`n8nio/n8n:latest`), PVC dedicado, ingress interno (Traefik) + privado (tailnet) |
 
-Detalhe completo (com fluxo de tráfego): [`cluster/helm-releases.md`](cluster/helm-releases.md).
+## Arquitetura
+
+```mermaid
+flowchart LR
+    ts[Tailnet Tailscale
+somente dispositivos autorizados] -->|HTTPS + TLS LE| pg[ProxyGroup
+ingress-proxies
+1 réplica]
+    pg --> kci[keycloak.ling-becrux.ts.net]
+    pg --> n8i[n8n.ling-becrux.ts.net]
+
+    subgraph k3s[Cluster K3s — single host (lab-brunovski)]
+        cp[control-plane
+systemd k3s server] --- w1[k3s-worker-1
+container agent] --- w2[k3s-worker-2
+container agent]
+        kci --> kc[Keycloak 26.7.4
+keycloakx :8080]
+        n8i --> n8[n8n
+PVC dedicado]
+        traefik2[Traefik 3.7.13
+LB interno 10.0.0.99] --> n8
+    end
+
+    pg --- k3s
+```
+
+Detalhe completo (com fluxo de tráfego): [`cluster/helm-releases.md`](cluster/helm-releases.md);
+topologia e modo de criação dos nós: [`cluster/topology.md`](cluster/topology.md).
+
+## Documentação/prints
+
+`docs/`: `arquitetura.jpg` (visão geral do homelab OCI), `keycloak-client.jpg`
+(cliente OIDC no Keycloak autenticando o Komodo) e `komodo-oidc.jpg` (o
+containers da UI com OICD ativo).
 
 ## Estrutura
 
