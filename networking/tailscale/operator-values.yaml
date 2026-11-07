@@ -1,0 +1,11 @@
+# USER-SUPPLIED VALUES do release "tailscale-operator" (ns tailscale),
+# chart tailscale-operator-1.102.3, instalado via helm em 13/09/2026.
+#
+# O release em produção recebe --set oauth.clientId/--set oauth.clientSecret
+# via CLI. O secret NUNCA vai pro Git: regenera um tskey-client-* no admin
+# do Tailscale e injeta via --set no redeploy (ou prefira Secret object +
+# oauthSecretVolume). Abaixo, o clientId (não é segredo) e o secret redactado.
+
+oauth:
+  clientId: kGpC5w6kRN11CNTRL
+  clientSecret: "<REDACTED — regenerar tskey-client e fazer --set no upgrade>"
