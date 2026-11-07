@@ -1,0 +1,46 @@
+# Workers do k3s como containers no host (cluster single-host).
+#
+# Reproduz o modo de criação dos k3s-worker-1/2 (docker run one-shot,
+# sem compose no disco). O token de bootstrap fica no host:
+#   sudo cat /var/lib/rancher/k3s/server/token
+# Exporte antes de subir:  export K3S_TOKEN=$(sudo cat /var/lib/rancher/k3s/server/token)
+# NUNCA commit o token aqui.
+#
+# CNI/kernel: o agent precisa de /proc e dos módulos do host (br_netfilter
+# já carregado pelo ExecStartPre do server). Name resolution: os containers
+# conversem com o gateway bridge (172.17.0.1), onde escuta o :6443 do server.
+
+services:
+  k3s-worker-1:
+    image: rancher/k3s:v1.36.4-k3s1
+    container_name: k3s-worker-1
+    command: >
+      agent --server https://172.17.0.1:6443 --token ${K3S_TOKEN}
+    restart: unless-stopped
+    privileged: true
+    environment:
+      CRI_CONFIG_FILE: /var/lib/rancher/k3s/agent/etc/crictl.yaml
+    volumes:
+      - k3s-worker-1:/var/lib/rancher/k3s
+      - /proc:/proc
+    ports:
+      - "none" # sem porta no host: só o bridge interno
+
+  k3s-worker-2:
+    image: rancher/k3s:v1.36.4-k3s1
+    container_name: k3s-worker-2
+    command: >
+      agent --server https://172.17.0.1:6443 --token ${K3S_TOKEN}
+    restart: unless-stopped
+    privileged: true
+    environment:
+      CRI_CONFIG_FILE: /var/lib/rancher/k3s/agent/etc/crictl.yaml
+    volumes:
+      - k3s-worker-2:/var/lib/rancher/k3s
+      - /proc:/proc
+    ports:
+      - "none"
+
+volumes:
+  k3s-worker-1:
+  k3s-worker-2:

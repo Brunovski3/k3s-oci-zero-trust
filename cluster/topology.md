@@ -13,7 +13,10 @@ k3s-worker-2    NotReady   worker          69d   v1.36.4+k3s1   172.17.0.2    <n
 lab-brunovski   Ready      control-plane   69d   v1.36.4+k3s1   10.0.0.99     <none>        Oracle Linux Server 10.2
 ```
 
-**Status do workers**: `NotReady`. Os containers Docker saíram há 7 semanas (`k3s-worker-1/2`: `Exited (0)`), então o cluster hoje sobrevive com o **control-plane only** — todos os workloads (Keycloak, n8n, ProxyGroup) têm 1 réplica que roda via systemd k3s server. Em execução há 69 dias sem being touched.
+**Status do workers — corrigido**: os containers Docker saíram há 7 semanas
+(NotReady velho), e foram reerguidos em 07/11/2026 (`docker start k3s-worker-1 k3s-worker-2`); os 3 nodes estão `Ready`. O compose que reproduz essa topologia está em [`k3s-workers-compose.yaml`](k3s-workers-compose.yaml).
+
+> Nota histórica: `NotReady`. Os containers Docker saíram há 7 semanas (`k3s-worker-1/2`: `Exited (0)`), então o cluster hoje sobrevive com o **control-plane only** — todos os workloads (Keycloak, n8n, ProxyGroup) têm 1 réplica que roda via systemd k3s server. Em execução há 69 dias sem being touched.
 
 ## Como o worker entra (audit trail).
 
