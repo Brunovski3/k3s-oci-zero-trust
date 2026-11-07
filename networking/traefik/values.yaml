@@ -1,0 +1,13 @@
+USER-SUPPLIED VALUES:
+api:
+  dashboard: true
+  insecure: true
+ports:
+  traefik:
+    expose:
+      default: true
+    port: 9000
+  web:
+    nodePort: 30080
+  websecure:
+    nodePort: 30443
