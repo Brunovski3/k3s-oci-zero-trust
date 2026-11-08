@@ -29,7 +29,7 @@ ingress-proxies
     pg --> kci[keycloak.ling-becrux.ts.net]
     pg --> n8i[n8n.ling-becrux.ts.net]
 
-    subgraph k3s[Cluster K3s — single host (lab-brunovski)]
+    subgraph k3s["Cluster K3s — single host (lab-brunovski)"]
         cp[control-plane
 systemd k3s server] --- w1[k3s-worker-1
 container agent] --- w2[k3s-worker-2
